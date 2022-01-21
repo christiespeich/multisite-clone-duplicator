@@ -29,9 +29,9 @@ if( !class_exists( 'MUCD_Data' ) ) {
          */
         public static function db_copy_tables( $from_site_id, $to_site_id ) {
             global $wpdb ;
-            
+
             // Source Site information
-            $from_site_prefix = $wpdb->get_blog_prefix( $from_site_id );                    // prefix 
+            $from_site_prefix = $wpdb->get_blog_prefix( $from_site_id );                    // prefix
             $from_site_prefix_length = strlen($from_site_prefix);                           // prefix length
 
             // Destination Site information
@@ -56,7 +56,7 @@ if( !class_exists( 'MUCD_Data' ) ) {
             }
             else {
                 $sql_query = $wpdb->prepare('SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = \'%s\' AND TABLE_NAME LIKE \'%s\'', $schema, $from_site_prefix_like . '%');
-                $from_site_table =  self::do_sql_query($sql_query, 'col'); 
+                $from_site_table =  self::do_sql_query($sql_query, 'col');
             }
 
             foreach ($from_site_table as $table) {
@@ -106,7 +106,7 @@ if( !class_exists( 'MUCD_Data' ) ) {
          * @param  int $to_site_id   new site id
          */
         public static function db_update_data( $from_site_id, $to_site_id, $saved_options ) {
-            global $wpdb ;  
+            global $wpdb ;
 
             $to_blog_prefix = $wpdb->get_blog_prefix( $to_site_id );
 
@@ -115,7 +115,7 @@ if( !class_exists( 'MUCD_Data' ) ) {
             $dir = wp_upload_dir();
             $from_upload_url = str_replace(network_site_url(), get_bloginfo('url').'/',$dir['baseurl']);
             $from_blog_url = get_blog_option( $from_site_id, 'siteurl' );
-            
+
             switch_to_blog($to_site_id);
             $dir = wp_upload_dir();
             $to_upload_url = str_replace(network_site_url(), get_bloginfo('url').'/', $dir['baseurl']);
@@ -143,7 +143,7 @@ if( !class_exists( 'MUCD_Data' ) ) {
                     $columns[] = $v;
                 }
 
-                $tables[$table] = $columns;    
+                $tables[$table] = $columns;
             }
 
             $default_tables = MUCD_Option::get_fields_to_update();
@@ -206,7 +206,18 @@ if( !class_exists( 'MUCD_Data' ) ) {
                     // Bugfix : escape '_' , '%' and '/' character for mysql 'like' queries
                     $from_string_like = $wpdb->esc_like($from_string);
 
-                    $sql_query = $wpdb->prepare('SELECT `' .$field. '` FROM `'.$table.'` WHERE `' .$field. '` LIKE "%s" ', '%' . $from_string_like . '%');  
+					//fix non datetime comparison error
+                    $sql_query = $wpdb->prepare("SELECT DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = '$table' AND COLUMN_NAME = '$field'");
+                    $data_type = self::do_sql_query($sql_query, 'results', FALSE);
+                    if( is_array( $data_type ) ){
+                        $data_type = $data_type[0]['DATA_TYPE'];
+                    }
+                    if( !in_array($data_type, ["datetime"]) ){
+                        $sql_query = $wpdb->prepare('SELECT `' .$field. '` FROM `'.$table.'` WHERE `' .$field. '` LIKE "%s" ', '%' . $from_string_like . '%');
+                        $results = self::do_sql_query($sql_query, 'results', FALSE);
+                    }
+
+                    $sql_query = $wpdb->prepare('SELECT `' .$field. '` FROM `'.$table.'` WHERE `' .$field. '` LIKE "%s" ', '%' . $from_string_like . '%');
                     $results = self::do_sql_query($sql_query, 'results', FALSE);
 
                     if($results) {
@@ -222,7 +233,7 @@ if( !class_exists( 'MUCD_Data' ) ) {
                 }
             }
         }
-      
+
         /**
          * Replace $from_string with $to_string in $val
          * Warning : if $to_string already in $val, no replacement is made

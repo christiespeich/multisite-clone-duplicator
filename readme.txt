@@ -3,7 +3,7 @@ Contributors: pdargham, julienog, daviddaug, globalis
 Tags: duplicate, clone, copy, duplication, duplicator, factory, multisite, site, blog, network, wpmu, new blog
 Requires at least: 4.0.0
 Tested up to: 5.0.0
-Stable tag: 1.5.3
+Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -11,12 +11,12 @@ Clones an existing site into a new one in a multisite installation : copies all 
 
 == Description ==
 
-MultiSite Clone Duplicator adds a "Duplicate Site" functionality to your network installation.  
+MultiSite Clone Duplicator adds a "Duplicate Site" functionality to your network installation.
 
-It allows you to clone any site of your network into a new one : all data, files, users and roles can be copied.  
+It allows you to clone any site of your network into a new one : all data, files, users and roles can be copied.
 
-It is useful when you want to create multiple sites from the same template : Don't waste your time copying the same configuration again and again !  
-  
+It is useful when you want to create multiple sites from the same template : Don't waste your time copying the same configuration again and again !
+
 Simple and user-friendly, this plugin extends WordPress core network's functionalities without polluting the dashboard.
 
 WARNING : If you clone the primary site, you must use ```mucd_default_primary_tables_to_copy``` filter to declare plugins and custom database tables, or your cloned site won't be complete
@@ -55,13 +55,13 @@ In the future, you'll probably want to create a dedicated "template" blog to clo
 * It copies upload directory from the old site to the upload directory of the new one (if option is checked)
 * It imports users and roles from the old site to the new one (if option is checked)
 
-= Does it support subdirectory AND subdomain installations ? = 
+= Does it support subdirectory AND subdomain installations ? =
 Yes, it supports both !
 
-= Can I clone the primary site ? = 
+= Can I clone the primary site ? =
 Yes you can, but you want to be careful : WordPress saves network tables and primary blog tables with the same prefix, and some of their data are mixed. It forces us to restrict primary blog cloning to copy only the default wp tables. If you want to change this (for example, include your plugin tables in the cloning), use mucd_default_primary_tables_to_copy filter. In the future, you want probably not to copy again and again the primary blog : use a "template" blog dedicated to clonage instead.
 
-= Does it clone plugins settings ? = 
+= Does it clone plugins settings ? =
 Yes it does !
 
 = But some data are serialized ? =
@@ -77,7 +77,7 @@ Arguments are : `wp site duplicate --slug=<slug> --source=<site_id> [--title=<ti
   [--email=<email>] [--network_id=<network-id>] [--private] [--porcelain] [--v]
   [--do_not_copy_files] [--keep_users] [--log=<dir_path>]`
 
-= Which languages are currently supported? = 
+= Which languages are currently supported? =
 As of now, following languages are supported : English (en_US), French (fr_FR), Spanish (es_ES), Lithuanian (lt_LT) and Greek (el). If you wish to, you can translate the interface in your own language in the [standard WordPress way](http://codex.wordpress.org/Translating_WordPress) or with [Transifex](https://www.transifex.com/projects/p/multisite-clone-duplicator/)
 
 = GLOBALIS what ? =
@@ -92,6 +92,9 @@ As of now, following languages are supported : English (en_US), French (fr_FR), 
 5. **Log warning**
 
 == Changelog ==
+
+= 1.5.4 =
+* fixes SQL Date problem
 
 = 1.5.3 =
 * Test compatibily with Wordpress 5.0.0
@@ -166,72 +169,72 @@ As of now, following languages are supported : English (en_US), French (fr_FR), 
 * Cannot clone primary site
 
 == Hooks ==
-  
+
 ---------------------------------------
 = Action : mucd_before_copy_files / mucd_after_copy_files =
-Action before / after copying files  
+Action before / after copying files
 **Args :**
 
   1. Int : from_site_id
   2. Int : to_site_id
-  
+
 ---------------------------------------
 = Action : mucd_before_copy_data / mucd_after_copy_data =
-Action before / after copying data  
+Action before / after copying data
 **Args :**
 
   1. Int : from_site_id
   2. Int : to_site_id
-  
+
 ---------------------------------------
 = Action : mucd_before_copy_users / mucd_after_copy_users =
-Action before / after copying users  
+Action before / after copying users
 **Args :**
 
   1. Int : from_site_id
   2. Int : to_site_id
-  
+
 ---------------------------------------
 = Filter : mucd_copy_blog_data_saved_options =
-Filter options that should be preserved in the new blog (original values from created blog will not be erased by copy of old site's tables)  
+Filter options that should be preserved in the new blog (original values from created blog will not be erased by copy of old site's tables)
 **Args :**
 
   1. Array of string : option_name
-  
+
 ---------------------------------------
 = Filter : mucd_default_fields_to_update =
-Filter fields to scan for an update after data copy  
+Filter fields to scan for an update after data copy
 **Args :**
 
   1. Array of ( 'table_name' => array('field_1', 'field_2' ...));
-  
+
 ---------------------------------------
 = Filter : mucd_default_primary_tables_to_copy =
-Filter tables to duplicate when duplicated site is primary site  
+Filter tables to duplicate when duplicated site is primary site
 **Args :**
 
   1. Array of string table_name
-  
+
 ---------------------------------------
 = Filter : mucd_copy_dirs =
-Filter directories and files you want to copy  
+Filter directories and files you want to copy
 **Args :**
 
   1. Array of string : dirs
   2. Int : from_site_id
   3. Int : to_site_id
-  
+
 ---------------------------------------
 = Filter : mucd_string_to_replace =
-Filter which strings we want to replace during update  
+Filter which strings we want to replace during update
 **Args :**
 
   1. String : string_to_replace
   2. Int : from_site_id
   3. Int : to_site_id
-  
+
 ---------------------------------------
-  
+
 == WP-CLI arguments ==
 
 Arguments are :
@@ -242,6 +245,6 @@ Arguments are :
 
 == Thank’s ==
 
-The original version of this plugin has been developed by [Julien OGER](https://github.com/julienOG) who keeps following the project carefully.  
+The original version of this plugin has been developed by [Julien OGER](https://github.com/julienOG) who keeps following the project carefully.
 
 Some code for search and replace in SQL serialised data were initialy taken from [Lionel Pointet Wordpress Migration tool](https://github.com/lpointet/wordpress_migration)
