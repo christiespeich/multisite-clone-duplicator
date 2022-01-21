@@ -6,7 +6,7 @@
  * Author:              Julien OGER, Pierre DARGHAM, David DAUGREILH, GLOBALIS media systems
  * Author URI:          https://github.com/globalis-ms/multisite-clone-duplicator
  *
- * Version:             1.5.3
+ * Version:             1.5.4
  * Requires at least:   4.0.0
  * Tested up to:        5.0.0
  *
@@ -43,7 +43,7 @@ if( !class_exists( 'MUCD' ) ) {
         require_once MUCD_COMPLETE_PATH . '/lib/duplicate.php';
         MUCD_Functions::set_locale_to_en_US();
         require_once MUCD_COMPLETE_PATH . '/wp-cli/wp-cli-site-duplicate-subcommand.php';
-    }    
+    }
 
     /**
      * Main class of the plugin
@@ -53,8 +53,8 @@ if( !class_exists( 'MUCD' ) ) {
         /**
         * Plugin's version number
         */
-        const VERSION = '1.5.3';
-        
+        const VERSION = '1.5.4';
+
         /**
          * Register hooks used by the plugin
          */
